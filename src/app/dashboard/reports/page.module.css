@@ -1,0 +1,31 @@
+.title {
+  margin-bottom: var(--spacing-lg);
+  color: var(--primary-dark);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: var(--spacing-sm);
+}
+
+.exportCard {
+  max-width: 500px;
+}
+
+.exportCard h3 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.exportCard p {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-muted);
+}

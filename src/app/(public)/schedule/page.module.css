@@ -1,0 +1,187 @@
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.btnNew {
+  background-color: #335c8d;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.btnNew:hover {
+  background-color: #26456b;
+}
+
+.content {
+  background-color: white;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.sectionSubtitle {
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background-color: #e0e7ff; /* Light blue background like image */
+  border-radius: 1rem;
+  border: 1px solid #c7d2fe;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.cardHeader {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.vaccineName {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pending {
+  background-color: #fde68a;
+  color: #92400e;
+}
+
+.approved {
+  background-color: #bbf7d0;
+  color: #166534;
+}
+
+.queueBox {
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  border: 1px solid #cbd5e1;
+}
+
+.queueNumber {
+  display: block;
+  font-weight: 700;
+  color: #335c8d;
+  font-size: 1.1rem;
+}
+
+.queueLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.cardBody {
+  padding: 1.5rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.infoItem {
+  display: flex;
+  gap: 1rem;
+}
+
+.infoItemFull {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.infoLabel {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.infoValue {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.cardFooter {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btnCancel {
+  background: white;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btnCancel:hover {
+  background-color: #fef2f2;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+}

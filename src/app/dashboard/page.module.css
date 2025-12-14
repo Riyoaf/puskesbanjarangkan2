@@ -1,0 +1,10 @@
+.title {
+  margin-bottom: var(--spacing-xl);
+  color: var(--primary-dark);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
