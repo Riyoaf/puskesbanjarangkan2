@@ -34,6 +34,10 @@ export default async function ActivitiesPage() {
               <label>Deskripsi</label>
               <textarea name="description" rows={3} />
             </div>
+            <div className={styles.field}>
+              <label>Gambar (Opsional)</label>
+              <input type="file" name="image" accept="image/*" />
+            </div>
             <button type="submit" className="btn btn-primary">Simpan</button>
           </form>
         </div>
@@ -48,6 +52,9 @@ export default async function ActivitiesPage() {
                   <button className={styles.deleteBtn}>🗑️</button>
                 </form>
               </div>
+              {activity.image_url && (
+                <img src={activity.image_url} alt={activity.title} className={styles.activityImage} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
+              )}
               <p className={styles.date}>
                 📅 {new Date(activity.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </p>

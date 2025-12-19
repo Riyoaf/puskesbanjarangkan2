@@ -44,6 +44,9 @@ export default async function AdminLayout({
           <Link href="/dashboard/activities" className={styles.navItem}>
             📅 Kelola Kegiatan
           </Link>
+          <Link href="/dashboard/news" className={styles.navItem}>
+            📰 Kelola Berita
+          </Link>
           <Link href="/dashboard/registrations" className={styles.navItem}>
             📝 Verifikasi Pendaftaran
           </Link>

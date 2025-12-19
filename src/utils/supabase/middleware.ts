@@ -42,20 +42,25 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/auth') &&
-    request.nextUrl.pathname !== '/'
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    // const url = request.nextUrl.clone()
-    // url.pathname = '/login'
-    // return NextResponse.redirect(url)
+    if (
+      !user &&
+      !request.nextUrl.pathname.startsWith('/login') &&
+      !request.nextUrl.pathname.startsWith('/auth') &&
+      request.nextUrl.pathname !== '/'
+    ) {
+      // no user, potentially respond by redirecting the user to the login page
+      // const url = request.nextUrl.clone()
+      // url.pathname = '/login'
+      // return NextResponse.redirect(url)
+    }
+  } catch (error) {
+    console.error('Middleware Supabase Auth Error:', error)
+    // Proceed without user session if auth check fails (e.g. network error)
   }
 
   return supabaseResponse

@@ -10,13 +10,41 @@ export async function addActivity(formData: FormData) {
   const date = formData.get('date') as string
   const location = formData.get('location') as string
   const description = formData.get('description') as string
+  const image = formData.get('image') as File
 
-  await supabase.from('activities').insert({
+  let image_url = null
+
+  if (image && image.size > 0) {
+    console.log('Uploading image:', image.name, image.size)
+    const fileExt = image.name.split('.').pop()
+    const fileName = `${Date.now()}.${fileExt}`
+    const { error: uploadError, data } = await supabase.storage
+      .from('images')
+      .upload(fileName, image)
+
+    if (uploadError) {
+      console.error('Upload Error:', uploadError)
+    } else {
+      console.log('Upload Success:', data)
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(fileName)
+      image_url = publicUrl
+      console.log('Public URL:', publicUrl)
+    }
+  } else {
+    console.log('No image provided or empty file')
+  }
+
+  const { error: dbError } = await supabase.from('activities').insert({
     title,
     date,
     location,
-    description
+    description,
+    image_url
   })
+
+  if (dbError) console.error('DB Insert Error:', dbError)
 
   revalidatePath('/dashboard/activities')
   revalidatePath('/') // Update landing page too
