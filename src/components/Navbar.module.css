@@ -1,7 +1,7 @@
 .navbar {
   background-color: #f8fafc; /* Light background as per design */
   border-bottom: 1px solid var(--border);
-  padding: 1rem 0;
+  padding: 0.5rem 0; /* Reduced padding to accommodate larger logo */
   position: sticky;
   top: 0;
   z-index: 100;
@@ -13,18 +13,109 @@
   align-items: center;
 }
 
-.logo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-main);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.logoWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.logoImage {
+  object-fit: contain;
+  height: 90px; /* Increased size */
+  width: auto;
+  margin: -25px 0; /* Negative margin to prevent navbar expansion */
+  position: relative;
+  z-index: 10;
 }
 
 .menu {
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+
+.mobileToggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 101;
+}
+
+.bar, .barOpen {
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-main);
+  transition: all 0.3s ease;
+}
+
+.barOpen:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.barOpen:nth-child(2) {
+  opacity: 0;
+}
+
+.barOpen:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+@media (max-width: 768px) {
+  .mobileToggle {
+    display: flex;
+  }
+
+  .menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background-color: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 6rem 2rem;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 100;
+  }
+
+  .menuOpen {
+    right: 0;
+  }
+
+  .auth {
+    margin-left: 0;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  
+  .profile {
+    width: 100%;
+  }
+  
+  .dropdown {
+    position: static;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    margin-top: 1rem;
+    display: flex; /* Always show dropdown content in mobile menu if logged in */
+    background: #f8fafc;
+    padding: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .link {
+    font-size: 1rem; /* Adjusted for mobile readability */
+    padding: 0.5rem 0;
+    display: block;
+    width: 100%;
+  }
 }
 
 .link {
@@ -86,6 +177,13 @@
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.userName {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  margin-bottom: 0.1rem;
 }
 
 .userEmail {

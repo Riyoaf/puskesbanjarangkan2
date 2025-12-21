@@ -37,21 +37,21 @@ export default async function DashboardPage() {
       
       <div className={styles.stats}>
         <div className="card">
-          <h3>Status Akun</h3>
+          <h3 className={styles.cardTitle}>Status Akun</h3>
           <p>{profile?.role === 'admin' ? 'Administrator' : 'Pasien Terdaftar'}</p>
         </div>
         
         {profile?.role === 'admin' && (
           <>
             <div className="card">
-              <h3>Total Pengguna</h3>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#2563eb' }}>{totalUsers || 0}</p>
-              <span style={{ fontSize: '0.8rem', color: '#666' }}>Terdaftar di sistem</span>
+              <h3 className={styles.cardTitle}>Total Pengguna</h3>
+              <p className={`${styles.cardValue} ${styles.valueBlue}`}>{totalUsers || 0}</p>
+              <span className={styles.cardLabel}>Terdaftar di sistem</span>
             </div>
             <div className="card">
-              <h3>Kunjungan Hari Ini</h3>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>{todayVisits}</p>
-              <span style={{ fontSize: '0.8rem', color: '#666' }}>Website views</span>
+              <h3 className={styles.cardTitle}>Kunjungan Hari Ini</h3>
+              <p className={`${styles.cardValue} ${styles.valueGreen}`}>{todayVisits}</p>
+              <span className={styles.cardLabel}>Website views</span>
             </div>
           </>
         )}

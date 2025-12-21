@@ -37,16 +37,16 @@ export default async function Home() {
         <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>
-              Mulai Hidup<br />
-              sehat dengan<br />
-              vaksinasi
+              <span className={styles.titleBlue}>VAKSIN UNTUK SEMUA.</span><br />
+              <span className={styles.titleBlue}>LINDUNGI DIRI, </span>
+              <span className={styles.titleGreen}>LINDUNGI NEGERI.</span>
             </h1>
           </div>
-          <div className={styles.heroImageContainer}>
+          {/* <div className={styles.heroImageContainer}>
              <div className={styles.heroCircle}>
                 <div className={styles.plantPlaceholder}>🌿</div>
              </div>
-          </div>
+          </div> */}
         </div>
       </section>
 

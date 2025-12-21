@@ -52,22 +52,15 @@ export async function signup(formData: FormData) {
     return { error: error.message }
   }
 
-  // Create profile
-  if (data.user) {
-    const { error: profileError } = await supabase.from('profiles').insert({
-      id: data.user.id,
-      full_name: fullName,
-      role: 'patient', // Default role
-    })
-
-    if (profileError) {
-      console.error('Error creating profile:', profileError)
-      // Consider how to handle this - maybe delete user or retry
-    }
+  // Check if session exists (Email confirmation disabled)
+  if (data.user && !data.session) {
+    console.warn('User registered but no session created. "Confirm email" might be enabled in Supabase.')
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  // Force sign out to ensure user has to login manually
+  await supabase.auth.signOut()
+
+  redirect('/login?message=Registrasi berhasil, silakan login')
 }
 
 export async function signout() {

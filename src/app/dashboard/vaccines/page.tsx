@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { addVaccine, updateStock, deleteVaccine } from './actions'
 import styles from './page.module.css'
+import EditVaccineModal from './EditVaccineModal'
 
 export default async function VaccinesPage() {
   const supabase = await createClient()
@@ -39,12 +40,16 @@ export default async function VaccinesPage() {
         <div className={styles.list}>
           {vaccines?.map((v) => (
             <div key={v.id} className={`card ${styles.vaccineCard}`}>
+
               <div className={styles.vaccineHeader}>
                 <h3>{v.name}</h3>
-                <form action={deleteVaccine} className={styles.deleteForm}>
-                  <input type="hidden" name="id" value={v.id} />
-                  <button className={styles.deleteBtn} title="Hapus">🗑️</button>
-                </form>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <EditVaccineModal vaccine={v} />
+                  <form action={deleteVaccine} className={styles.deleteForm}>
+                    <input type="hidden" name="id" value={v.id} />
+                    <button className={styles.deleteBtn} title="Hapus">🗑️</button>
+                  </form>
+                </div>
               </div>
               <p className={styles.desc}>{v.description || 'Tidak ada deskripsi'}</p>
               

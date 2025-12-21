@@ -1,82 +1,237 @@
-.title {
-  margin-bottom: var(--spacing-lg);
-  color: var(--primary-dark);
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.pageHeader {
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.contentWrapper {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.sectionSubtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
 }
 
 .list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
 }
 
 .card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  transition: transform 0.2s ease;
 }
 
-.header {
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.cardHeader {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  padding: 1.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Decorative syringe icon background */
+.cardHeader::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 120px;
+  height: 120px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m19 7-7 7'/%3E%3Cpath d='m14 2 3 3'/%3E%3Cpath d='m17 5 3 3'/%3E%3Cpath d='m2 22 5-5'/%3E%3Cpath d='m2 22 5-5 7-7c1.1-1.1 1.1-2.9 0-4L9 1c-1.1-1.1-2.9-1.1-4 0L2 4'/%3E%3Cpath d='m2 22 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.2;
+  transform: rotate(-45deg);
+}
+
+.badgeContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  z-index: 1;
 }
 
-.badge {
+.headerBadge {
+  border: 1px solid rgba(255, 255, 255, 0.6);
   padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 500;
   text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
 }
 
-.pending {
-  background-color: #fef3c7;
-  color: #d97706;
-}
-
-.approved {
-  background-color: #dbeafe;
-  color: #2563eb;
-}
-
-.completed {
-  background-color: #dcfce7;
-  color: #16a34a;
-}
-
-.rejected {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
-
-.details {
-  display: grid;
-  gap: 0.5rem;
-  background-color: #f8fafc;
-  padding: 1rem;
-  border-radius: 0.5rem;
-}
-
-.detailItem {
+.checkIcon {
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
   display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 0.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.detailItem:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.vaccineTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.label {
-  color: var(--text-muted);
+.cardBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.detailRow {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.rowIcon {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  margin-top: 2px;
+  width: 20px;
+  text-align: center;
+}
+
+.rowContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.rowLabel {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 0.1rem;
+}
+
+.rowValue {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.divider {
+  height: 1px;
+  background-color: #f1f5f9;
+  margin: 0.5rem 0;
+}
+
+.cardFooter {
+  padding: 1rem;
+  background-color: #fff;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  color: #22c55e;
+  font-weight: 600;
   font-size: 0.9rem;
 }
 
-.value {
-  font-weight: 500;
-  color: var(--text-main);
-  text-align: right;
+.verifiedIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px dashed #e2e8f0;
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .pageTitle {
+    font-size: 1.125rem; /* ~18px */
+  }
+
+  .contentWrapper {
+    padding: 1rem;
+  }
+
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .cardHeader {
+    padding: 1rem;
+    height: auto;
+    min-height: 120px;
+  }
+
+  .vaccineTitle {
+    font-size: 1rem; /* 16px */
+  }
+
+  .rowLabel {
+    font-size: 0.75rem; /* 12px */
+  }
+
+  .rowValue {
+    font-size: 0.875rem; /* 14px */
+  }
+
+  .cardBody {
+    padding: 1rem;
+  }
 }

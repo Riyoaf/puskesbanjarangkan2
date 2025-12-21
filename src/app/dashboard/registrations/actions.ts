@@ -32,5 +32,29 @@ export async function updateRegistrationStatus(formData: FormData) {
     })
     .eq('id', id)
 
+  // Decrement stock if status is completed
+  if (status === 'completed') {
+    const { data: registration } = await supabase
+      .from('registrations')
+      .select('vaccine_id')
+      .eq('id', id)
+      .single()
+
+    if (registration?.vaccine_id) {
+      const { data: vaccine } = await supabase
+        .from('vaccines')
+        .select('stock')
+        .eq('id', registration.vaccine_id)
+        .single()
+      
+      if (vaccine) {
+        await supabase
+          .from('vaccines')
+          .update({ stock: Math.max(0, vaccine.stock - 1) })
+          .eq('id', registration.vaccine_id)
+      }
+    }
+  }
+
   revalidatePath('/dashboard/registrations')
 }

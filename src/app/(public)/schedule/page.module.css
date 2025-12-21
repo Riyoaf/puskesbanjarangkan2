@@ -185,3 +185,156 @@
   padding: 3rem;
   color: #64748b;
 }
+
+/* History Section */
+.historySection {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.historyCard {
+  background-color: #f1f5f9;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e2e8f0;
+}
+
+.historyHeader {
+  margin-bottom: 1rem;
+}
+
+.historyVaccineName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.historyBody {
+  display: flex;
+  gap: 2rem;
+  color: #64748b;
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emptyText {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.completed {
+  background-color: #bbf7d0;
+  color: #166534;
+}
+
+.cancelled {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+
+  .title {
+    font-size: 1.125rem; /* ~18px */
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btnNew {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.9rem; /* Reduced */
+    padding: 0.6rem 1rem; /* Reduced padding */
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .vaccineName {
+    font-size: 0.95rem; /* Reduced */
+    margin-bottom: 0.25rem;
+  }
+
+  .badge {
+    font-size: 0.7rem; /* Reduced */
+    padding: 0.2rem 0.5rem;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .queueBox {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem; /* Reduced padding */
+  }
+
+  .queueLabel {
+    font-size: 0.7rem; /* Reduced */
+  }
+
+  .queueNumber {
+    display: inline;
+    margin-left: 0.5rem;
+    font-size: 1rem; /* Reduced */
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem; /* Tighter gap */
+  }
+
+  .infoLabel {
+    font-size: 0.7rem; /* Reduced */
+    margin-bottom: 0;
+  }
+
+  .infoValue {
+    font-size: 0.85rem; /* Reduced */
+  }
+
+  .icon {
+    font-size: 1.1rem; /* Reduced icon size */
+  }
+
+  .cardFooter {
+    padding: 0.75rem 1rem;
+  }
+
+  .btnCancel {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.85rem; /* Reduced */
+    padding: 0.5rem;
+  }
+}

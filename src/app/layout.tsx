@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 import VisitTracker from '@/components/VisitTracker'
+import { Toaster } from 'react-hot-toast'
 
 export default function RootLayout({
   children,
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <VisitTracker />
+        <Toaster position="top-center" />
         {children}
       </body>
     </html>

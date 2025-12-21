@@ -131,7 +131,7 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
               <option value="">pilih jenis vaksin</option>
               {vaccines?.map((v) => (
                 <option key={v.id} value={v.id}>
-                  {v.name} (Sisa Stok: {v.stock})
+                  {v.name} {v.description ? `- ${v.description}` : ''}
                 </option>
               ))}
             </select>

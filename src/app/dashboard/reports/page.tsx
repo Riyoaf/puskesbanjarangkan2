@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import styles from './page.module.css'
+import ExportButtons from '@/components/ExportButtons'
 
 export default async function ReportsPage() {
   const supabase = await createClient()
@@ -66,14 +67,8 @@ export default async function ReportsPage() {
 
       <div className={`card ${styles.exportCard}`}>
         <h3>Export Data</h3>
-        <p>Unduh laporan lengkap data imunisasi dalam format CSV.</p>
-        {/* Simple CSV download link/button logic would go here. 
-            For MVP, we can just show the button or implement a simple client-side download if needed.
-            Since this is a server component, we'd need a client component or route handler for the download.
-        */}
-        <button className="btn btn-primary" disabled title="Fitur akan segera hadir">
-          Download Laporan (CSV)
-        </button>
+        <p>Unduh laporan lengkap data imunisasi dalam format CSV atau PDF.</p>
+        <ExportButtons />
       </div>
     </div>
   )

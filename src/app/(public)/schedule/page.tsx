@@ -8,18 +8,17 @@ export default async function SchedulePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: registrations } = await supabase
+  const { data: allRegistrations } = await supabase
     .from('registrations')
     .select(`
       *,
       vaccines (name)
     `)
     .eq('user_id', user?.id)
-    .neq('status', 'cancelled') // Don't show cancelled
-    .neq('status', 'rejected')  // Don't show rejected
-    .neq('status', 'completed') // Don't show completed (maybe move to history?)
-    // User said "Jadwal Mendatang", so likely only pending/approved
     .order('scheduled_date', { ascending: true })
+
+  const upcoming = allRegistrations?.filter(r => ['pending', 'approved'].includes(r.status)) || []
+  const history = allRegistrations?.filter(r => ['completed', 'cancelled', 'rejected'].includes(r.status)) || []
 
   return (
     <div className={styles.container}>
@@ -36,12 +35,12 @@ export default async function SchedulePage() {
       <div className={styles.content}>
         <h2 className={styles.sectionTitle}>Jadwal Mendatang</h2>
         <p className={styles.sectionSubtitle}>
-          {registrations?.length || 0} jadwal yang perlu anda hadiri
+          {upcoming.length || 0} jadwal yang perlu anda hadiri
         </p>
 
         <div className={styles.list}>
-          {Array.isArray(registrations) && registrations.length > 0 ? (
-            registrations.map((reg) => (
+          {upcoming.length > 0 ? (
+            upcoming.map((reg) => (
               <div key={reg.id} className={styles.card}>
                 <div className={styles.cardHeader}>
                   <div className={styles.vaccineInfo}>
@@ -98,6 +97,51 @@ export default async function SchedulePage() {
               <p>Tidak ada jadwal vaksinasi mendatang.</p>
             </div>
           )}
+        </div>
+
+        {/* History Section */}
+        <div className={styles.historySection}>
+          <h2 className={styles.sectionTitle}>Riwayat Jadwal</h2>
+          <p className={styles.sectionSubtitle}>Jadwal yang telah selesai atau dibatalkan</p>
+
+          <div className={styles.historyList}>
+            {history.length > 0 ? (
+              history.map((reg) => (
+                <div key={reg.id} className={styles.historyCard}>
+                  <div className={styles.historyHeader}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <h3 className={styles.historyVaccineName}>{reg.vaccines?.name}</h3>
+                      <span className={`${styles.badge} ${styles[reg.status]}`}>
+                        {reg.status === 'completed' ? 'Selesai' : 
+                         reg.status === 'cancelled' ? 'Dibatalkan' : 'Ditolak'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.historyBody}>
+                    <div className={styles.historyItem}>
+                      <span>📅</span>
+                      <span>
+                        {reg.scheduled_date 
+                          ? new Date(reg.scheduled_date).toLocaleDateString('id-ID')
+                          : '-'}
+                      </span>
+                    </div>
+                    <div className={styles.historyItem}>
+                      <span>🕒</span>
+                      <span>{reg.vaccination_time || '00.00 WITA'}</span>
+                    </div>
+                    <div className={styles.historyItem}>
+                      <span>#</span>
+                      <span>{reg.queue_number || '-'}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className={styles.emptyText}>Belum ada riwayat jadwal.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
