@@ -47,10 +47,15 @@ export default async function ActivitiesPage() {
             <div key={activity.id} className={`card ${styles.activityCard}`}>
               <div className={styles.header}>
                 <h3>{activity.title}</h3>
-                <form action={deleteActivity}>
-                  <input type="hidden" name="id" value={activity.id} />
-                  <button className={styles.deleteBtn}>🗑️</button>
-                </form>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <a href={`/dashboard/activities/${activity.id}/edit`} className={styles.editBtn} style={{ textDecoration: 'none', fontSize: '1.2rem' }} title="Edit">
+                    ✏️
+                  </a>
+                  <form action={deleteActivity}>
+                    <input type="hidden" name="id" value={activity.id} />
+                    <button className={styles.deleteBtn} title="Hapus">🗑️</button>
+                  </form>
+                </div>
               </div>
               {activity.image_url && (
                 <img src={activity.image_url} alt={activity.title} className={styles.activityImage} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />

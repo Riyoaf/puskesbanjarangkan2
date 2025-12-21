@@ -30,24 +30,30 @@ export default async function NewsDetailPage({
               📅 {date ? new Date(date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : ''}
             </span>
             {sourceName && <span className={styles.source}>📰 {sourceName}</span>}
+            <a href={sourceUrl} target="_blank" rel="noopener noreferrer" className={styles.headerLink}>
+              Buka di Sumber Asli ↗
+            </a>
           </div>
 
-          {image && (
-            <div className={styles.imageContainer}>
-              <img src={image} alt={title} className={styles.image} />
-            </div>
-          )}
-
           <div className={styles.body}>
-            <p className={styles.description}>{description}</p>
-            {content && <p className={styles.content}>{content}</p>}
-            
-            <div className={styles.readMore}>
-              <p>Untuk membaca artikel selengkapnya, silakan kunjungi sumber asli:</p>
-              <a href={sourceUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                Baca Selengkapnya di {sourceName || 'Sumber Asli'} ↗
-              </a>
-            </div>
+            {/* Iframe for full article - Main Focus */}
+            {sourceUrl ? (
+              <div className={styles.iframeContainer}>
+                <iframe 
+                  src={sourceUrl} 
+                  className={styles.iframe} 
+                  title="Full Article" 
+                  sandbox="allow-scripts allow-same-origin allow-popups"
+                />
+                <div className={styles.fallbackOverlay}>
+                  <p>Memuat artikel...</p>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.error}>
+                <p>URL sumber tidak tersedia.</p>
+              </div>
+            )}
           </div>
         </article>
       </div>

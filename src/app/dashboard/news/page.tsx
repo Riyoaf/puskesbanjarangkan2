@@ -39,10 +39,15 @@ export default async function NewsPage() {
             <div key={news.id} className={`card ${styles.activityCard}`}>
               <div className={styles.header}>
                 <h3>{news.title}</h3>
-                <form action={deleteNews}>
-                  <input type="hidden" name="id" value={news.id} />
-                  <button className={styles.deleteBtn}>🗑️</button>
-                </form>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <a href={`/dashboard/news/${news.id}/edit`} className={styles.editBtn} style={{ textDecoration: 'none', fontSize: '1.2rem' }} title="Edit">
+                    ✏️
+                  </a>
+                  <form action={deleteNews}>
+                    <input type="hidden" name="id" value={news.id} />
+                    <button className={styles.deleteBtn} title="Hapus">🗑️</button>
+                  </form>
+                </div>
               </div>
               {news.image_url && (
                 <img src={news.image_url} alt={news.title} className={styles.activityImage} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />

@@ -107,4 +107,27 @@
   font-size: 0.9rem;
   color: #334155;
   line-height: 1.5;
+  flex-grow: 1; /* Allow text area to grow */
+}
+
+.cardDescription {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 1rem;
+}
+
+.readMoreLink {
+  display: inline-block;
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: auto; /* Push to bottom */
+}
+
+.readMoreLink:hover {
+  text-decoration: underline;
 }

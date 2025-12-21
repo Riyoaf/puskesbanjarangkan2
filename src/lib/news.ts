@@ -38,7 +38,7 @@ export async function getHealthNews() {
 
   try {
     const res = await fetch(
-      `https://newsapi.org/v2/top-headlines?country=id&category=health&apiKey=${apiKey}&pageSize=12`,
+      `https://newsapi.org/v2/top-headlines?country=id&apiKey=${apiKey}&pageSize=100`,
       { next: { revalidate: 3600 } } // Cache for 1 hour
     )
     
@@ -49,7 +49,20 @@ export async function getHealthNews() {
 
     const data = await res.json()
     console.log(`Fetched ${data.articles?.length} articles from API`)
-    return data.articles && data.articles.length > 0 ? data.articles : mockNews
+    
+    if (data.articles && data.articles.length > 0) {
+      return data.articles
+    } else {
+      console.log('Top headlines returned 0 results, trying fallback search...')
+      // Fallback to searching for "sehat" or "kesehatan" if top headlines is empty
+      const fallbackRes = await fetch(
+        `https://newsapi.org/v2/everything?q=kesehatan&language=id&sortBy=publishedAt&apiKey=${apiKey}&pageSize=20`,
+        { next: { revalidate: 3600 } }
+      )
+      const fallbackData = await fallbackRes.json()
+      console.log(`Fallback fetched ${fallbackData.articles?.length} articles`)
+      return fallbackData.articles && fallbackData.articles.length > 0 ? fallbackData.articles : mockNews
+    }
   } catch (error) {
     console.warn('Error fetching news, using mock data:', error)
     return mockNews

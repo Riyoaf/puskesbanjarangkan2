@@ -11,16 +11,19 @@ export const metadata: Metadata = {
   description: "Sistem Informasi Vaksinasi Puskesmas Banjarangkan",
 };
 
+import VisitTracker from '@/components/VisitTracker'
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="id">
+    <html lang="en">
       <body className={inter.className}>
+        <VisitTracker />
         {children}
       </body>
     </html>
-  );
+  )
 }

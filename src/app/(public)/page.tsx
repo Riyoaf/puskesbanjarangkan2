@@ -63,7 +63,7 @@ export default async function Home() {
                   <div className={styles.cardImagePlaceholder}></div>
                 )}
                 <div className={styles.cardContent}>
-                  <p className={styles.cardText}>
+                  <div className={styles.cardText}>
                     <strong>{item.title}</strong><br/>
                     <span style={{ fontSize: '0.9em', color: '#666' }}>
                       📅 {new Date(item.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
@@ -76,8 +76,14 @@ export default async function Home() {
                       </>
                     )}
                     <br/>
-                    {item.description || item.content || "Informasi terkini dari Puskesmas."}
-                  </p>
+                    <div className={styles.cardDescription}>
+                      {item.description || item.content || "Informasi terkini dari Puskesmas."}
+                    </div>
+                    
+                    <Link href={`/information/${item.type}/${item.id}`} className={styles.readMoreLink}>
+                      Baca Selengkapnya →
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
@@ -101,39 +107,27 @@ export default async function Home() {
         <div className="container">
           <h2 className={styles.sectionTitle}>Berita Terkini</h2>
           <div className={styles.grid}>
-            {externalNews.map((article: any, index: number) => {
-              const queryParams = new URLSearchParams({
-                title: article.title || '',
-                date: article.publishedAt || '',
-                image: article.urlToImage || '',
-                description: article.description || '',
-                sourceUrl: article.url || '',
-                sourceName: article.source?.name || '',
-                content: article.content || ''
-              }).toString()
-
-              return (
-                <Link 
-                  key={index} 
-                  href={`/news/detail?${queryParams}`}
-                  className={styles.infoCard}
-                >
-                  {article.urlToImage ? (
-                    <img src={article.urlToImage} alt={article.title} className={styles.cardImage} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
-                  ) : (
-                    <div className={styles.cardImagePlaceholder}></div>
-                  )}
-                  <div className={styles.cardContent}>
-                    <p className={styles.cardText}>
-                      <strong>{article.title}</strong><br/>
-                      <span style={{ fontSize: '0.85em', color: '#666' }}>
-                        {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
-                      </span>
-                    </p>
-                  </div>
-                </Link>
-              )
-            })}
+            {externalNews.map((article: any, index: number) => (
+              <a 
+                key={index} 
+                href={article.url} 
+                className={styles.infoCard}
+              >
+                {article.urlToImage ? (
+                  <img src={article.urlToImage} alt={article.title} className={styles.cardImage} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
+                ) : (
+                  <div className={styles.cardImagePlaceholder}></div>
+                )}
+                <div className={styles.cardContent}>
+                  <p className={styles.cardText}>
+                    <strong>{article.title}</strong><br/>
+                    <span style={{ fontSize: '0.85em', color: '#666' }}>
+                      {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+                    </span>
+                  </p>
+                </div>
+              </a>
+            ))}
 
             {(!externalNews || externalNews.length === 0) && <p>Belum ada berita terkini.</p>}
           </div>
