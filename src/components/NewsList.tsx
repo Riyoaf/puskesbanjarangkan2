@@ -19,7 +19,8 @@ export default function NewsList({ initialNews }: { initialNews: any[] }) {
           }
         }
       } catch (error) {
-        console.error('Error polling news:', error)
+        // Ignore network errors during development/reloads
+        console.warn('News polling failed (likely server restart or network issue):', error)
       } finally {
         setLoading(false)
       }
