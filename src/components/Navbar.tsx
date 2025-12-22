@@ -1,4 +1,5 @@
 'use client'
+// Force HMR update
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -6,6 +7,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { signout } from '@/app/auth/actions'
 import styles from './Navbar.module.css'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function Navbar({ user, role }: { user: any, role: string | null }) {
   const pathname = usePathname()
@@ -34,9 +36,11 @@ export default function Navbar({ user, role }: { user: any, role: string | null 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          <span className={isMobileMenuOpen ? styles.barOpen : styles.bar}></span>
-          <span className={isMobileMenuOpen ? styles.barOpen : styles.bar}></span>
-          <span className={isMobileMenuOpen ? styles.barOpen : styles.bar}></span>
+          {isMobileMenuOpen ? (
+            <XMarkIcon className="w-6 h-6" style={{ width: 24, height: 24 }} />
+          ) : (
+            <Bars3Icon className="w-6 h-6" style={{ width: 24, height: 24 }} />
+          )}
         </button>
 
         {/* Desktop Menu */}
@@ -92,7 +96,7 @@ export default function Navbar({ user, role }: { user: any, role: string | null 
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
               >
                 <div className={styles.avatar}>
-                  {user.email?.[0].toUpperCase()}
+                  {(user.user_metadata?.full_name || user.email)?.[0]?.toUpperCase()}
                 </div>
                 <div className={styles.dropdown}>
                   <div className={styles.userInfo}>

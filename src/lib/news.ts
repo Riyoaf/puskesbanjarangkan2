@@ -1,4 +1,4 @@
-export async function getHealthNews() {
+export async function getHealthNews(options: RequestInit = { next: { revalidate: 3600 } }) {
   const apiKey = process.env.NEWS_API_KEY
   
   console.log('Fetching news... API Key present:', !!apiKey)
@@ -39,7 +39,7 @@ export async function getHealthNews() {
   try {
     const res = await fetch(
       `https://newsapi.org/v2/top-headlines?country=id&apiKey=${apiKey}&pageSize=100`,
-      { next: { revalidate: 3600 } } // Cache for 1 hour
+      options
     )
     
     if (!res.ok) {
@@ -57,7 +57,7 @@ export async function getHealthNews() {
       // Fallback to searching for "sehat" or "kesehatan" if top headlines is empty
       const fallbackRes = await fetch(
         `https://newsapi.org/v2/everything?q=kesehatan&language=id&sortBy=publishedAt&apiKey=${apiKey}&pageSize=20`,
-        { next: { revalidate: 3600 } }
+        options
       )
       const fallbackData = await fallbackRes.json()
       console.log(`Fallback fetched ${fallbackData.articles?.length} articles`)

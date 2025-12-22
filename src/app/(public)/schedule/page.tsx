@@ -4,6 +4,14 @@ import { cancelSchedule } from './actions'
 import styles from './page.module.css'
 import CancelButton from './CancelButton'
 
+import { 
+  PlusIcon, 
+  CalendarIcon, 
+  ClockIcon, 
+  MapPinIcon, 
+  HashtagIcon 
+} from '@heroicons/react/24/outline'
+
 export default async function SchedulePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -28,7 +36,7 @@ export default async function SchedulePage() {
           <p className={styles.subtitle}>Kelola dan pantau jadwal vaksinasi anda</p>
         </div>
         <Link href="/vaccination" className={styles.btnNew}>
-          ➕ Daftar Baru
+          <PlusIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Daftar Baru
         </Link>
       </div>
 
@@ -58,7 +66,9 @@ export default async function SchedulePage() {
                 <div className={styles.cardBody}>
                   <div className={styles.infoGrid}>
                     <div className={styles.infoItem}>
-                      <span className={styles.icon}>📅</span>
+                      <span className={styles.icon}>
+                        <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                      </span>
                       <div>
                         <p className={styles.infoLabel}>Tanggal</p>
                         <p className={styles.infoValue}>
@@ -69,14 +79,18 @@ export default async function SchedulePage() {
                       </div>
                     </div>
                     <div className={styles.infoItem}>
-                      <span className={styles.icon}>🕒</span>
+                      <span className={styles.icon}>
+                        <ClockIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                      </span>
                       <div>
                         <p className={styles.infoLabel}>Waktu</p>
                         <p className={styles.infoValue}>{reg.vaccination_time || '00.00 WITA'}</p>
                       </div>
                     </div>
                     <div className={styles.infoItemFull}>
-                      <span className={styles.icon}>📍</span>
+                      <span className={styles.icon}>
+                        <MapPinIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                      </span>
                       <div>
                         <p className={styles.infoLabel}>Lokasi</p>
                         <p className={styles.infoValue}>Puskesmas Banjarangkan II</p>
@@ -120,7 +134,7 @@ export default async function SchedulePage() {
                   
                   <div className={styles.historyBody}>
                     <div className={styles.historyItem}>
-                      <span>📅</span>
+                      <CalendarIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
                       <span>
                         {reg.scheduled_date 
                           ? new Date(reg.scheduled_date).toLocaleDateString('id-ID')
@@ -128,11 +142,11 @@ export default async function SchedulePage() {
                       </span>
                     </div>
                     <div className={styles.historyItem}>
-                      <span>🕒</span>
+                      <ClockIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
                       <span>{reg.vaccination_time || '00.00 WITA'}</span>
                     </div>
                     <div className={styles.historyItem}>
-                      <span>#</span>
+                      <HashtagIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
                       <span>{reg.queue_number || '-'}</span>
                     </div>
                   </div>

@@ -1,7 +1,9 @@
 import { createClient } from '@/utils/supabase/server'
 import { getHealthNews } from '@/lib/news'
 import Link from 'next/link'
+import NewsList from '@/components/NewsList'
 import styles from './page.module.css'
+import { CalendarIcon, MapPinIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 
 export default async function Home() {
   const supabase = await createClient()
@@ -11,21 +13,21 @@ export default async function Home() {
     .from('activities')
     .select('*')
     .order('date', { ascending: true })
-    .limit(4)
+    .limit(12)
 
   // Fetch internal news
   const { data: internalNews } = await supabase
     .from('news')
     .select('*')
     .order('created_at', { ascending: false })
-    .limit(4)
+    .limit(12)
 
   // Combine activities and internal news for "Information" section
   const informationList = [
     ...(activities || []).map(a => ({ ...a, type: 'activity', date: a.date })),
     ...(internalNews || []).map(n => ({ ...n, type: 'news', date: n.created_at }))
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-   .slice(0, 4)
+   .slice(0, 12)
 
   // Fetch external news for "Berita Terkini"
   const externalNews = await getHealthNews()
@@ -65,13 +67,13 @@ export default async function Home() {
                 <div className={styles.cardContent}>
                   <div className={styles.cardText}>
                     <strong>{item.title}</strong><br/>
-                    <span style={{ fontSize: '0.9em', color: '#666' }}>
-                      📅 {new Date(item.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                    <span style={{ fontSize: '0.9em', color: '#666', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <CalendarIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> {new Date(item.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                     </span><br/>
                     {item.type === 'activity' && (
                       <>
-                        <span style={{ fontSize: '0.9em', color: '#666' }}>
-                          📍 {item.location}
+                        <span style={{ fontSize: '0.9em', color: '#666', display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <MapPinIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> {item.location}
                         </span><br/>
                       </>
                     )}
@@ -80,8 +82,8 @@ export default async function Home() {
                       {item.description || item.content || "Informasi terkini dari Puskesmas."}
                     </div>
                     
-                    <Link href={`/information/${item.type}/${item.id}`} className={styles.readMoreLink}>
-                      Baca Selengkapnya →
+                    <Link href={`/information/${item.type}/${item.id}`} className={styles.readMoreLink} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      Baca Selengkapnya <ArrowLongRightIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
                     </Link>
                   </div>
                 </div>
@@ -103,34 +105,10 @@ export default async function Home() {
       </section>
 
       {/* News Section (External API) */}
-       <section className={styles.infoSection}>
+      <section className={styles.infoSection}>
         <div className="container">
           <h2 className={styles.sectionTitle}>Berita Terkini</h2>
-          <div className={styles.grid}>
-            {externalNews.map((article: any, index: number) => (
-              <a 
-                key={index} 
-                href={article.url} 
-                className={styles.infoCard}
-              >
-                {article.urlToImage ? (
-                  <img src={article.urlToImage} alt={article.title} className={styles.cardImage} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
-                ) : (
-                  <div className={styles.cardImagePlaceholder}></div>
-                )}
-                <div className={styles.cardContent}>
-                  <p className={styles.cardText}>
-                    <strong>{article.title}</strong><br/>
-                    <span style={{ fontSize: '0.85em', color: '#666' }}>
-                      {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
-                    </span>
-                  </p>
-                </div>
-              </a>
-            ))}
-
-            {(!externalNews || externalNews.length === 0) && <p>Belum ada berita terkini.</p>}
-          </div>
+          <NewsList initialNews={externalNews} />
         </div>
       </section>
     </main>

@@ -20,9 +20,10 @@ export default function DashboardCharts({ visits }: { visits: any[] }) {
   }
 
   return (
-    <div style={{ width: '100%', height: 300, marginTop: '2rem', background: 'white', padding: '1rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+    <div style={{ width: '100%', marginTop: '2rem', background: 'white', padding: '1rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
       <h3 style={{ marginBottom: '1rem', color: '#333' }}>Statistik Kunjungan (7 Hari Terakhir)</h3>
-      <ResponsiveContainer width="100%" height="100%">
+      <div style={{ width: '100%', height: 300 }}>
+        <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           margin={{
@@ -39,7 +40,8 @@ export default function DashboardCharts({ visits }: { visits: any[] }) {
           <Legend />
           <Bar dataKey="visits" name="Jumlah Kunjungan" fill="#3b82f6" radius={[4, 4, 0, 0]} />
         </BarChart>
-      </ResponsiveContainer>
+        </ResponsiveContainer>
+      </div>
     </div>
   )
 }

@@ -10,6 +10,10 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
+  if (!email.endsWith('@gmail.com')) {
+    return { error: 'Hanya email @gmail.com yang diperbolehkan' }
+  }
+
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -37,6 +41,10 @@ export async function signup(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const fullName = formData.get('fullName') as string
+
+  if (!email.endsWith('@gmail.com')) {
+    return { error: 'Hanya email @gmail.com yang diperbolehkan' }
+  }
 
   const { data, error } = await supabase.auth.signUp({
     email,

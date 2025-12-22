@@ -4,6 +4,17 @@ import Link from 'next/link'
 import { useState } from 'react'
 import styles from './layout.module.css'
 import { signout } from '@/app/auth/actions'
+import { 
+  Bars3Icon, 
+  XMarkIcon, 
+  HomeIcon, 
+  CalendarIcon, 
+  NewspaperIcon, 
+  ClipboardDocumentCheckIcon, 
+  UsersIcon, 
+  BeakerIcon, 
+  ChartBarIcon 
+} from '@heroicons/react/24/outline'
 
 export default function Sidebar({ profile }: { profile: any }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,7 +26,7 @@ export default function Sidebar({ profile }: { profile: any }) {
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle sidebar"
       >
-        ☰
+        <Bars3Icon className="w-6 h-6" style={{ width: 24, height: 24 }} />
       </button>
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
@@ -25,31 +36,31 @@ export default function Sidebar({ profile }: { profile: any }) {
             className={styles.closeBtn}
             onClick={() => setIsOpen(false)}
           >
-            ✕
+            <XMarkIcon className="w-6 h-6" style={{ width: 24, height: 24 }} />
           </button>
         </div>
         
         <nav className={styles.nav}>
           <Link href="/dashboard" className={styles.navItem} onClick={() => setIsOpen(false)}>
-            🏠 Dashboard
+            <HomeIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Dashboard
           </Link>
           <Link href="/dashboard/activities" className={styles.navItem} onClick={() => setIsOpen(false)}>
-            📅 Kelola Kegiatan
+            <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Kelola Kegiatan
           </Link>
           <Link href="/dashboard/news" className={styles.navItem} onClick={() => setIsOpen(false)}>
-            📰 Kelola Berita
+            <NewspaperIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Kelola Berita
           </Link>
           <Link href="/dashboard/registrations" className={styles.navItem} onClick={() => setIsOpen(false)}>
-            📝 Verifikasi Pendaftaran
+            <ClipboardDocumentCheckIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Verifikasi Pendaftaran
           </Link>
           <Link href="/dashboard/patients" className={styles.navItem} onClick={() => setIsOpen(false)}>
-            👥 Data Pasien
+            <UsersIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Data Pasien
           </Link>
           <Link href="/dashboard/vaccines" className={styles.navItem} onClick={() => setIsOpen(false)}>
-            💉 Kelola Vaksin
+            <BeakerIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Kelola Vaksin
           </Link>
           <Link href="/dashboard/reports" className={styles.navItem} onClick={() => setIsOpen(false)}>
-            📊 Laporan
+            <ChartBarIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Laporan
           </Link>
         </nav>
 

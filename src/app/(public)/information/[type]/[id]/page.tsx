@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import styles from './page.module.css'
 import { notFound } from 'next/navigation'
+import { ArrowLeftIcon, CalendarIcon, MapPinIcon } from '@heroicons/react/24/outline'
 
 export default async function InformationDetailPage({
   params,
@@ -42,18 +43,18 @@ export default async function InformationDetailPage({
   return (
     <main className={styles.container}>
       <div className={styles.contentWrapper}>
-        <Link href="/" className={styles.backLink}>
-          ← Kembali ke Beranda
+        <Link href="/" className={styles.backLink} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <ArrowLeftIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Kembali ke Beranda
         </Link>
 
         <article className={styles.article}>
           <h1 className={styles.title}>{title}</h1>
           
           <div className={styles.meta}>
-            <span className={styles.date}>
-              📅 {new Date(date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            <span className={styles.date} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {new Date(date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </span>
-            {location && <span className={styles.location}>📍 {location}</span>}
+            {location && <span className={styles.location} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><MapPinIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {location}</span>}
             <span className={styles.typeBadge}>
               {type === 'activity' ? 'Kegiatan' : 'Berita Internal'}
             </span>
@@ -67,7 +68,9 @@ export default async function InformationDetailPage({
                 rel="noopener noreferrer"
                 className={styles.calendarBtn}
               >
-                📅 Simpan ke Google Calendar
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> Simpan ke Google Calendar
+                </span>
               </a>
             </div>
           )}

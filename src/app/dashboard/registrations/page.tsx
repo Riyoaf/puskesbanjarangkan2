@@ -4,6 +4,16 @@ import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
 import { updateRegistrationStatus } from './actions'
 import styles from './page.module.css'
+import { 
+  MagnifyingGlassIcon, 
+  HashtagIcon, 
+  UserIcon, 
+  ChevronDownIcon, 
+  ChevronUpIcon, 
+  CheckIcon, 
+  XMarkIcon, 
+  NoSymbolIcon 
+} from '@heroicons/react/24/outline'
 
 // Client component for interactivity (Search/Filter)
 export default function AdminRegistrationsPage() {
@@ -97,13 +107,17 @@ export default function AdminRegistrationsPage() {
 
       {/* Search & Filter */}
       <div className={styles.controls}>
-        <input 
-          type="text" 
-          placeholder="Cari nama, NIK, atau no antrian..." 
-          className={styles.searchInput}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        <div style={{ position: 'relative', flex: 1 }}>
+          <MagnifyingGlassIcon className="w-5 h-5" style={{ width: 20, height: 20, position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+          <input 
+            type="text" 
+            placeholder="Cari nama, NIK, atau no antrian..." 
+            className={styles.searchInput}
+            style={{ paddingLeft: '2.5rem' }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <select 
           className={styles.filterSelect}
           value={filterStatus}
@@ -133,10 +147,15 @@ export default function AdminRegistrationsPage() {
                 <div className={styles.cardHeader}>
                   <div className={styles.queueBox}>
                     <span className={styles.queueLabel}>Antrian</span>
-                    <span className={styles.queueNumber}>{reg.queue_number || '-'}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                      <HashtagIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
+                      <span className={styles.queueNumber}>{reg.queue_number || '-'}</span>
+                    </div>
                   </div>
                   <div className={styles.headerInfo}>
-                    <h3 className={styles.patientName}>{reg.patient_name || 'Tanpa Nama'}</h3>
+                    <h3 className={styles.patientName} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <UserIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {reg.patient_name || 'Tanpa Nama'}
+                    </h3>
                     <span className={`${styles.badge} ${styles[reg.status]}`}>
                       {reg.status}
                     </span>
@@ -154,22 +173,37 @@ export default function AdminRegistrationsPage() {
                   <button 
                     className={styles.btnDetail}
                     onClick={() => toggleExpand(reg.id)}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                   >
-                    {expandedId === reg.id ? 'Tutup Detail' : 'Lihat Detail'}
+                    {expandedId === reg.id ? (
+                      <>Tutup Detail <ChevronUpIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /></>
+                    ) : (
+                      <>Lihat Detail <ChevronDownIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /></>
+                    )}
                   </button>
                   
                   {/* Status Actions */}
                   {reg.status === 'pending' && (
                     <div className={styles.actionButtons}>
-                      <button onClick={() => handleStatusUpdate(reg.id, 'approved')} className={styles.btnApprove}>Setujui</button>
-                      <button onClick={() => handleStatusUpdate(reg.id, 'rejected')} className={styles.btnReject}>Tolak</button>
-                      <button onClick={() => handleStatusUpdate(reg.id, 'cancelled')} className={styles.btnCancel}>Batalkan</button>
+                      <button onClick={() => handleStatusUpdate(reg.id, 'approved')} className={styles.btnApprove} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                        <CheckIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Setujui
+                      </button>
+                      <button onClick={() => handleStatusUpdate(reg.id, 'rejected')} className={styles.btnReject} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                        <XMarkIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Tolak
+                      </button>
+                      <button onClick={() => handleStatusUpdate(reg.id, 'cancelled')} className={styles.btnCancel} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                        <NoSymbolIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Batalkan
+                      </button>
                     </div>
                   )}
                   {reg.status === 'approved' && (
                     <div className={styles.actionButtons}>
-                      <button onClick={() => handleStatusUpdate(reg.id, 'completed')} className={styles.btnComplete}>Selesai</button>
-                      <button onClick={() => handleStatusUpdate(reg.id, 'cancelled')} className={styles.btnCancel}>Batalkan</button>
+                      <button onClick={() => handleStatusUpdate(reg.id, 'completed')} className={styles.btnComplete} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                        <CheckIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Selesai
+                      </button>
+                      <button onClick={() => handleStatusUpdate(reg.id, 'cancelled')} className={styles.btnCancel} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                        <NoSymbolIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Batalkan
+                      </button>
                     </div>
                   )}
                 </div>

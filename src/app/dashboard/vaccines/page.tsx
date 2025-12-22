@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { addVaccine, updateStock, deleteVaccine } from './actions'
 import styles from './page.module.css'
 import EditVaccineModal from './EditVaccineModal'
+import { TrashIcon } from '@heroicons/react/24/outline'
 
 export default async function VaccinesPage() {
   const supabase = await createClient()
@@ -47,7 +48,9 @@ export default async function VaccinesPage() {
                   <EditVaccineModal vaccine={v} />
                   <form action={deleteVaccine} className={styles.deleteForm}>
                     <input type="hidden" name="id" value={v.id} />
-                    <button className={styles.deleteBtn} title="Hapus">🗑️</button>
+                    <button className={styles.deleteBtn} title="Hapus">
+                      <TrashIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </button>
                   </form>
                 </div>
               </div>

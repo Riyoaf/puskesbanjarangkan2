@@ -1,6 +1,11 @@
 import { createClient } from '@/utils/supabase/server'
 import { addNews, deleteNews } from './actions'
 import styles from '../activities/page.module.css' // Reusing styles from activities
+import { 
+  PencilSquareIcon, 
+  TrashIcon, 
+  CalendarIcon 
+} from '@heroicons/react/24/outline'
 
 export default async function NewsPage() {
   const supabase = await createClient()
@@ -41,19 +46,21 @@ export default async function NewsPage() {
                 <h3>{news.title}</h3>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <a href={`/dashboard/news/${news.id}/edit`} className={styles.editBtn} style={{ textDecoration: 'none', fontSize: '1.2rem' }} title="Edit">
-                    ✏️
+                    <PencilSquareIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
                   </a>
                   <form action={deleteNews}>
                     <input type="hidden" name="id" value={news.id} />
-                    <button className={styles.deleteBtn} title="Hapus">🗑️</button>
+                    <button className={styles.deleteBtn} title="Hapus">
+                      <TrashIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </button>
                   </form>
                 </div>
               </div>
               {news.image_url && (
                 <img src={news.image_url} alt={news.title} className={styles.activityImage} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
               )}
-              <p className={styles.date}>
-                📅 {new Date(news.created_at).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              <p className={styles.date} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {new Date(news.created_at).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
               <p className={styles.desc}>{news.content}</p>
             </div>

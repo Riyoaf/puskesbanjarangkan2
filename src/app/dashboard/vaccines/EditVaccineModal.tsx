@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { updateVaccine } from './actions'
 import styles from './page.module.css'
+import { PencilSquareIcon } from '@heroicons/react/24/outline'
 
 type Vaccine = {
   id: string
@@ -27,7 +28,7 @@ export default function EditVaccineModal({ vaccine }: { vaccine: Vaccine }) {
         title="Edit" 
         style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}
       >
-        ✏️
+        <PencilSquareIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
       </button>
 
       {isOpen && (

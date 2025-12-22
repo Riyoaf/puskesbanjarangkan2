@@ -1,6 +1,12 @@
 import { createClient } from '@/utils/supabase/server'
 import { addActivity, deleteActivity } from './actions'
 import styles from './page.module.css'
+import { 
+  PencilSquareIcon, 
+  TrashIcon, 
+  CalendarIcon, 
+  MapPinIcon 
+} from '@heroicons/react/24/outline'
 
 export default async function ActivitiesPage() {
   const supabase = await createClient()
@@ -49,21 +55,25 @@ export default async function ActivitiesPage() {
                 <h3>{activity.title}</h3>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <a href={`/dashboard/activities/${activity.id}/edit`} className={styles.editBtn} style={{ textDecoration: 'none', fontSize: '1.2rem' }} title="Edit">
-                    ✏️
+                    <PencilSquareIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
                   </a>
                   <form action={deleteActivity}>
                     <input type="hidden" name="id" value={activity.id} />
-                    <button className={styles.deleteBtn} title="Hapus">🗑️</button>
+                    <button className={styles.deleteBtn} title="Hapus">
+                      <TrashIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </button>
                   </form>
                 </div>
               </div>
               {activity.image_url && (
                 <img src={activity.image_url} alt={activity.title} className={styles.activityImage} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
               )}
-              <p className={styles.date}>
-                📅 {new Date(activity.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              <p className={styles.date} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {new Date(activity.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
-              <p className={styles.location}>📍 {activity.location}</p>
+              <p className={styles.location} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <MapPinIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {activity.location}
+              </p>
               <p className={styles.desc}>{activity.description}</p>
             </div>
           ))}

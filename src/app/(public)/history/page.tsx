@@ -1,5 +1,14 @@
 import { createClient } from '@/utils/supabase/server'
 import styles from './page.module.css'
+import { 
+  CheckIcon, 
+  CheckBadgeIcon, 
+  UserIcon, 
+  IdentificationIcon, 
+  CalendarIcon, 
+  MapPinIcon, 
+  ClockIcon 
+} from '@heroicons/react/24/outline'
 
 export default async function HistoryPage() {
   const supabase = await createClient()
@@ -36,9 +45,7 @@ export default async function HistoryPage() {
                   <div className={styles.badgeContainer}>
                     <span className={styles.headerBadge}>Kartu Vaksin</span>
                     <div className={styles.checkIcon}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
+                      <CheckIcon className="w-4 h-4" style={{ width: 14, height: 14, color: 'white' }} />
                     </div>
                   </div>
                   <h3 className={styles.vaccineTitle}>{reg.vaccines?.name}</h3>
@@ -47,7 +54,9 @@ export default async function HistoryPage() {
                 {/* Card Body - White */}
                 <div className={styles.cardBody}>
                   <div className={styles.detailRow}>
-                    <span className={styles.rowIcon}>👤</span>
+                    <span className={styles.rowIcon}>
+                      <UserIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </span>
                     <div className={styles.rowContent}>
                       <span className={styles.rowLabel}>Nama Pasien</span>
                       <span className={styles.rowValue}>{reg.patient_name}</span>
@@ -55,7 +64,9 @@ export default async function HistoryPage() {
                   </div>
                   
                   <div className={styles.detailRow}>
-                    <span className={styles.rowIcon}>🆔</span>
+                    <span className={styles.rowIcon}>
+                      <IdentificationIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </span>
                     <div className={styles.rowContent}>
                       <span className={styles.rowLabel}>NIK</span>
                       <span className={styles.rowValue}>{reg.nik}</span>
@@ -65,7 +76,9 @@ export default async function HistoryPage() {
                   <div className={styles.divider}></div>
 
                   <div className={styles.detailRow}>
-                    <span className={styles.rowIcon}>📅</span>
+                    <span className={styles.rowIcon}>
+                      <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </span>
                     <div className={styles.rowContent}>
                       <span className={styles.rowLabel}>Tanggal Vaksinasi</span>
                       <span className={styles.rowValue}>
@@ -78,7 +91,9 @@ export default async function HistoryPage() {
                   </div>
 
                   <div className={styles.detailRow}>
-                    <span className={styles.rowIcon}>📍</span>
+                    <span className={styles.rowIcon}>
+                      <MapPinIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </span>
                     <div className={styles.rowContent}>
                       <span className={styles.rowLabel}>Tempat Vaksinasi</span>
                       <span className={styles.rowValue}>Puskesmas Banjarangkan 2</span>
@@ -86,7 +101,9 @@ export default async function HistoryPage() {
                   </div>
 
                   <div className={styles.detailRow}>
-                    <span className={styles.rowIcon}>⏰</span>
+                    <span className={styles.rowIcon}>
+                      <ClockIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                    </span>
                     <div className={styles.rowContent}>
                       <span className={styles.rowLabel}>Waktu</span>
                       <span className={styles.rowValue}>{reg.vaccination_time || '-'}</span>
@@ -96,10 +113,7 @@ export default async function HistoryPage() {
 
                 {/* Card Footer - Verified */}
                 <div className={styles.cardFooter}>
-                  <svg className={styles.verifiedIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
+                  <CheckBadgeIcon className={styles.verifiedIcon} style={{ width: 20, height: 20 }} />
                   <span>Terverifikasi</span>
                 </div>
               </div>

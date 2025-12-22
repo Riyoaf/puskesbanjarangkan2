@@ -3,6 +3,18 @@
 import { useState } from 'react'
 import styles from './page.module.css'
 import { registerVaccine } from './actions'
+import { 
+  PencilSquareIcon, 
+  ArrowPathIcon, 
+  InformationCircleIcon, 
+  UserIcon, 
+  CalendarIcon, 
+  IdentificationIcon, 
+  PhoneIcon, 
+  BeakerIcon, 
+  ClockIcon, 
+  ExclamationTriangleIcon 
+} from '@heroicons/react/24/outline'
 
 type Props = {
   vaccines: any[]
@@ -33,7 +45,7 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
           className={`${styles.toggleBtn} ${mode === 'new' ? styles.active : ''}`}
           onClick={() => setMode('new')}
         >
-          📝 Daftar Baru
+          <PencilSquareIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Daftar Baru
         </button>
         <button 
           type="button"
@@ -42,7 +54,7 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
           disabled={!lastReg}
           title={!lastReg ? "Belum ada data pendaftaran sebelumnya" : ""}
         >
-          🔄 Daftar Ulang (Data Lama)
+          <ArrowPathIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Daftar Ulang (Data Lama)
         </button>
       </div>
 
@@ -55,14 +67,19 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
 
         {mode === 'existing' && lastReg && (
           <div className={styles.infoBox}>
-            <p>ℹ️ Data formulir telah diisi otomatis berdasarkan pendaftaran terakhir anda.</p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <InformationCircleIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> 
+              Data formulir telah diisi otomatis berdasarkan pendaftaran terakhir anda.
+            </p>
           </div>
         )}
 
         <form action={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <label htmlFor="fullName" className={styles.label}>
-              👤 Nama Pasien *
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <UserIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Nama Pasien *
+              </div>
             </label>
             <input 
               id="fullName" 
@@ -77,7 +94,9 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
 
           <div className={styles.field}>
             <label htmlFor="birthDate" className={styles.label}>
-              📅 Tanggal Lahir *
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <CalendarIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Tanggal Lahir *
+              </div>
             </label>
             <input 
               id="birthDate" 
@@ -92,7 +111,9 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
 
           <div className={styles.field}>
             <label htmlFor="nik" className={styles.label}>
-              123 Nomor Induk Kependudukan (NIK)*
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <IdentificationIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Nomor Induk Kependudukan (NIK)*
+              </div>
             </label>
             <input 
               id="nik" 
@@ -109,7 +130,9 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
 
           <div className={styles.field}>
             <label htmlFor="phoneNumber" className={styles.label}>
-              📱 Nomor HP *
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <PhoneIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Nomor HP *
+              </div>
             </label>
             <input 
               id="phoneNumber" 
@@ -125,7 +148,9 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
 
           <div className={styles.field}>
             <label htmlFor="vaccineId" className={styles.label}>
-              💉 Jenis Vaksin *
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <BeakerIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Jenis Vaksin *
+              </div>
             </label>
             <select id="vaccineId" name="vaccineId" required className={styles.select}>
               <option value="">pilih jenis vaksin</option>
@@ -139,7 +164,9 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
 
           <div className={styles.field}>
             <label className={styles.label}>
-              📅 Tanggal Vaksin
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <CalendarIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Tanggal Vaksin
+              </div>
             </label>
             <input 
               disabled 
@@ -151,7 +178,9 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
 
           <div className={styles.field}>
             <label htmlFor="time" className={styles.label}>
-              🕒 Pilih Waktu *
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <ClockIcon className="w-4 h-4" style={{ width: 16, height: 16 }} /> Pilih Waktu *
+              </div>
             </label>
             <select id="time" name="time" required className={styles.select}>
               <option value="">pilih jam vaksin</option>
@@ -170,7 +199,9 @@ export default function RegistrationForm({ vaccines, lastReg, userEmail }: Props
           </div>
 
           <div className={styles.warningBox}>
-            <p className={styles.warningTitle}>⚠️ Perhatian:</p>
+            <p className={styles.warningTitle} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ExclamationTriangleIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> Perhatian:
+            </p>
             <ul className={styles.warningList}>
               <li>Harap datang 15 menit sebelum jadwal</li>
               <li>Gunakan masker dan patuhi protokol kesehatan</li>
