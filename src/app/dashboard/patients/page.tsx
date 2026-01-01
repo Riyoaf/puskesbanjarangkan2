@@ -1,159 +1,166 @@
-'use client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import { createClient } from '@/utils/supabase/client'
-import { useEffect, useState } from 'react'
-import styles from './page.module.css'
+import { useMemo, useState } from "react";
 
-export default function PatientsPage() {
-  const [profiles, setProfiles] = useState<any[]>([])
-  const [registrations, setRegistrations] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const [editingProfile, setEditingProfile] = useState<any | null>(null)
+import { Description, Heading1 } from "@/components/atoms/typography";
+import { EditProfileForm } from "@/components/organisms/edit-profile-form";
+import { Button } from "@/components/ui/button";
+import { usePatiens } from "@/hooks/use-profiles";
+import { useRegistrations } from "@/hooks/use-registrations";
+import { formatDate } from "@/lib/utils";
+import { TProfile } from "@/schema/profile-schema";
+import { TRegistration } from "@/schema/registration-schema";
+import { createClient } from "@/utils/supabase/client";
 
-  const supabase = createClient()
+import styles from "./page.module.css";
 
-  useEffect(() => {
-    fetchData()
-  }, [])
+export default function Page() {
+  const { data: patients, isLoading: isLoadingPatients } = usePatiens();
+  const { data: registrations, isLoading: isLoadingRegistrations } =
+    useRegistrations();
+  const [editingProfile, setEditingProfile] = useState<any | null>(null);
 
-  const fetchData = async () => {
-    setLoading(true)
-    const { data: profs } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('role', 'patient')
-    
-    const { data: regs } = await supabase
-      .from('registrations')
-      .select('*, vaccines(name)')
-      .order('created_at', { ascending: false })
-
-    if (profs) setProfiles(profs)
-    if (regs) setRegistrations(regs)
-    setLoading(false)
-  }
+  const patientsData: TProfile[] | null | undefined = useMemo(
+    () => patients?.data,
+    [patients]
+  );
+  const registrationsData: TRegistration[] | null | undefined = useMemo(
+    () => registrations?.data,
+    [registrations]
+  );
+  const supabase = createClient();
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Apakah anda yakin ingin menghapus data pasien ini?')) return
+    if (!confirm("Apakah anda yakin ingin menghapus data pasien ini?")) return;
 
-    const { error } = await supabase
-      .from('profiles')
-      .delete()
-      .eq('id', id)
+    const { error } = await supabase.from("profiles").delete().eq("id", id);
 
     if (error) {
-      alert('Gagal menghapus: ' + error.message)
+      alert("Gagal menghapus: " + error.message);
     } else {
-      fetchData()
+      // fetchData();
     }
-  }
+  };
 
   const handleEdit = (profile: any) => {
-    setEditingProfile(profile)
-  }
+    setEditingProfile(profile);
+  };
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!editingProfile) return
-
-    const { error } = await supabase
-      .from('profiles')
-      .update({ full_name: editingProfile.full_name }) // Only full_name is editable in profiles for now
-      .eq('id', editingProfile.id)
-
-    if (error) {
-      alert('Gagal menyimpan: ' + error.message)
-    } else {
-      setEditingProfile(null)
-      fetchData()
-    }
-  }
+  const loading = isLoadingPatients || isLoadingRegistrations;
 
   return (
     <div>
-      <h1 className={styles.title}>Data Pasien</h1>
-      
-      {loading ? <p>Loading...</p> : (
+      <div className="mb-6">
+        <Heading1 text="Kelola Data Pasien" />
+        <Description text="Kelola pasien yang akan ditangani oleh Puskesmas" />
+      </div>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
         <div className={styles.grid}>
-          {profiles.map((profile) => {
-            const patientRegs = registrations.filter(r => r.user_id === profile.id) || []
-            const completedCount = patientRegs.filter(r => r.status === 'completed').length
-            
-            return (
-              <div key={profile.id} className={styles.card}>
-                <div className={styles.header}>
-                  <div className={styles.avatar}>
-                    {profile.email?.[0].toUpperCase()}
-                  </div>
-                  <div>
-                    <h3 className={styles.name}>{profile.full_name || 'Tanpa Nama'}</h3>
-                    <p className={styles.email}>{profile.email}</p>
-                  </div>
-                </div>
-                
-                <div className={styles.stats}>
-                  <div className={styles.statItem}>
-                    <span className={styles.statLabel}>Total Vaksinasi</span>
-                    <span className={styles.statValue}>{completedCount}</span>
-                  </div>
-                </div>
+          {patientsData &&
+            patientsData.map((profile) => {
+              const patientRegs =
+                (registrationsData &&
+                  registrationsData.filter((r) => r.user_id === profile.id)) ||
+                [];
+              const completedCount = patientRegs.filter(
+                (r) => r.status === "completed"
+              ).length;
 
-                <div className={styles.history}>
-                  <h4 className={styles.historyTitle}>Riwayat Vaksinasi</h4>
-                  {patientRegs.length > 0 ? (
-                    <ul className={styles.historyList}>
-                      {patientRegs.filter(r => r.status === 'completed').map(reg => (
-                        <li key={reg.id} className={styles.historyItem}>
-                          <div className={styles.historyDetail}>
-                            <span className={styles.vaccineName}>{reg.vaccines?.name}</span>
-                            <span className={styles.patientNameDetail}>({reg.patient_name})</span>
-                          </div>
-                          <span className={`${styles.badge} ${styles[reg.status]}`}>
-                            {reg.status}
-                          </span>
-                          <span className={styles.date}>
-                            {new Date(reg.created_at).toLocaleDateString('id-ID')}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className={styles.emptyHistory}>Belum ada riwayat.</p>
-                  )}
-                </div>
+              return (
+                <div key={profile.id} className={styles.card}>
+                  <div className={styles.header}>
+                    <div className={styles.avatar}>
+                      {profile.email?.[0].toUpperCase()}
+                    </div>
+                    <div>
+                      <h3 className={styles.name}>
+                        {profile.full_name || "Tanpa Nama"}
+                      </h3>
+                      <p className={styles.email}>{profile.email}</p>
+                    </div>
+                  </div>
 
-                <div className={styles.actions}>
-                  <button onClick={() => handleEdit(profile)} className={styles.btnEdit}>Edit</button>
-                  <button onClick={() => handleDelete(profile.id)} className={styles.btnDelete}>Hapus</button>
+                  <div className={styles.stats}>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Total Vaksinasi</span>
+                      <span className={styles.statValue}>{completedCount}</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.history}>
+                    <h4 className={styles.historyTitle}>Riwayat Vaksinasi</h4>
+                    {patientRegs.length > 0 ? (
+                      <ul className="space-y-2">
+                        {patientRegs
+                          .filter((r) => r.status === "completed")
+                          .map((reg) => (
+                            <li
+                              key={reg.id}
+                              className="flex flex-wrap items-center gap-2">
+                              <div className={styles.historyDetail}>
+                                <span className={styles.vaccineName}>
+                                  {reg.vaccines?.name}
+                                </span>
+                                <span className={styles.patientNameDetail}>
+                                  ({reg.patient_name})
+                                </span>
+                              </div>
+                              <span
+                                className={`${styles.badge} ${
+                                  styles[reg.status]
+                                }`}>
+                                {reg.status}
+                              </span>
+                              <span className={styles.date}>
+                                {formatDate(
+                                  reg.created_at?.toString() as string
+                                )}
+                              </span>
+                            </li>
+                          ))}
+                      </ul>
+                    ) : (
+                      <p className={styles.emptyHistory}>Belum ada riwayat.</p>
+                    )}
+                  </div>
+
+                  <div className={styles.actions}>
+                    <button
+                      onClick={() => handleEdit(profile)}
+                      className={styles.btnEdit}>
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(profile.id as string)}
+                      className={styles.btnDelete}>
+                      Hapus
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              );
+            })}
         </div>
       )}
 
-      {/* Edit Modal */}
       {editingProfile && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <h2>Edit Pasien</h2>
-            <form onSubmit={handleSave}>
-              <div className={styles.field}>
-                <label>Nama Lengkap</label>
-                <input 
-                  value={editingProfile.full_name || ''} 
-                  onChange={e => setEditingProfile({...editingProfile, full_name: e.target.value})}
-                  className={styles.input}
-                />
-              </div>
-              <div className={styles.modalActions}>
-                <button type="button" onClick={() => setEditingProfile(null)} className={styles.btnCancel}>Batal</button>
-                <button type="submit" className={styles.btnSave}>Simpan</button>
-              </div>
-            </form>
+            <EditProfileForm payload={editingProfile} />
+
+            <Button
+              variant={"outline"}
+              onClick={() => setEditingProfile(null)}
+              className="mt-2 w-full">
+              Batal
+            </Button>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

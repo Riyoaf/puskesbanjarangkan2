@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/ui/spinner";
-import { useDeleteActivity } from "@/hooks/use-activity";
+import { useDeleteActivity } from "@/hooks/use-activities";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
 interface Props {

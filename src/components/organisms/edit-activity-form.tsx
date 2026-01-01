@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { useUpdateActivity } from "@/hooks/use-activity";
+import { useUpdateActivity } from "@/hooks/use-activities";
 import { FormActivitySchema, TActivity } from "@/schema/activity-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 

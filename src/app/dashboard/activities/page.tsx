@@ -9,7 +9,7 @@ import CardBody from "@/components/molecules/card-body";
 import ActivityCard from "@/components/organisms/activity-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useActivities } from "@/hooks/use-activity";
+import { useActivities } from "@/hooks/use-activities";
 import { usePathSegments } from "@/hooks/use-path-segment";
 import { TActivity } from "@/schema/activity-schema";
 

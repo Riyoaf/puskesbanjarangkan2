@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 
-import { useCreateActivity } from "@/hooks/use-activity";
-import { FormActivitySchema, TActivity } from "@/schema/activity-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateActivity } from "@/hooks/use-activities";
+import { TActivity } from "@/schema/activity-schema";
 
 import ActivityForm from "./activity-form";
 
@@ -10,7 +9,7 @@ export function AddActivityForm() {
   const { mutateAsync, isPending } = useCreateActivity();
 
   const form = useForm<TActivity>({
-    resolver: zodResolver(FormActivitySchema),
+    // resolver: zodResolver(FormActivitySchema),
     defaultValues: {},
   });
 

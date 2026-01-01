@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 
 import { useCreateNews } from "@/hooks/use-news";
-import { FormNewsSchema, TNews } from "@/schema/news-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { TNews } from "@/schema/news-schema";
 
 import NewsForm from "./news-form";
 
@@ -10,7 +9,7 @@ export function AddNewsForm() {
   const { mutateAsync, isPending } = useCreateNews();
 
   const form = useForm<TNews>({
-    resolver: zodResolver(FormNewsSchema),
+    // resolver: zodResolver(FormNewsSchema),
     defaultValues: {},
   });
 

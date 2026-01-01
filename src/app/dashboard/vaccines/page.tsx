@@ -1,78 +1,52 @@
-import { createClient } from '@/utils/supabase/server'
-import { addVaccine, updateStock, deleteVaccine } from './actions'
-import styles from './page.module.css'
-import EditVaccineModal from './EditVaccineModal'
-import { TrashIcon } from '@heroicons/react/24/outline'
+"use client";
 
-export default async function VaccinesPage() {
-  const supabase = await createClient()
-  
-  const { data: vaccines } = await supabase
-    .from('vaccines')
-    .select('*')
-    .order('name')
+import { useMemo } from "react";
+
+import { Description, Heading1 } from "@/components/atoms/typography";
+import CardBody from "@/components/molecules/card-body";
+import { AddVaccineForm } from "@/components/organisms/add-vaccine-form";
+import { DeleteVaccineButton } from "@/components/organisms/delete-vaccine-form";
+import { useVaccines } from "@/hooks/use-vaccines";
+import { TVaccine } from "@/schema/vaccine-schema";
+
+import EditVaccineModal from "./edit-vaccine-modal";
+import styles from "./page.module.css";
+
+export default function VaccinesPage() {
+  const { data, isLoading } = useVaccines();
+  const vaccinesData: TVaccine[] | null | undefined = useMemo(
+    () => data?.data,
+    [data]
+  );
 
   return (
     <div>
-      <h1 className={styles.title}>Kelola Vaksin</h1>
-      
-      <div className={styles.grid}>
-        {/* Add New Vaccine Form */}
-        <div className={`card ${styles.addCard}`}>
-          <h3>Tambah Vaksin Baru</h3>
-          <form action={addVaccine} className={styles.form}>
-            <div className={styles.field}>
-              <label>Nama Vaksin</label>
-              <input name="name" required placeholder="Contoh: Sinovac" />
-            </div>
-            <div className={styles.field}>
-              <label>Stok Awal</label>
-              <input name="stock" type="number" required min="0" />
-            </div>
-            <div className={styles.field}>
-              <label>Deskripsi</label>
-              <textarea name="description" placeholder="Keterangan singkat..." />
-            </div>
-            <button type="submit" className="btn btn-primary">Tambah</button>
-          </form>
-        </div>
+      <div className="mb-6">
+        <Heading1 text="Kelola Data Vaksin" />
+        <Description text="Kelola vaksin yang akan ditangani oleh Puskesmas" />
+      </div>
 
-        {/* List Vaccines */}
-        <div className={styles.list}>
-          {vaccines?.map((v) => (
-            <div key={v.id} className={`card ${styles.vaccineCard}`}>
-
-              <div className={styles.vaccineHeader}>
-                <h3>{v.name}</h3>
-                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+      <div className="md:gap-4 space-y-4 grid grid-cols-1 md:grid-cols-3">
+        <CardBody className="">
+          <AddVaccineForm />
+        </CardBody>
+        <div className="gap-4 grid md:col-span-2">
+          {vaccinesData?.map((v) => (
+            <CardBody key={v.id} className="h-fit">
+              <div className="flex flex-wrap justify-between items-center gap-4">
+                <h3 className="font-semibold text-sm">{v.name}</h3>
+                <div className="flex items-center">
                   <EditVaccineModal vaccine={v} />
-                  <form action={deleteVaccine} className={styles.deleteForm}>
-                    <input type="hidden" name="id" value={v.id} />
-                    <button className={styles.deleteBtn} title="Hapus">
-                      <TrashIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
-                    </button>
-                  </form>
+                  <DeleteVaccineButton id={v.id as string} />
                 </div>
               </div>
-              <p className={styles.desc}>{v.description || 'Tidak ada deskripsi'}</p>
-              
-              <div className={styles.stockControl}>
-                <label>Stok:</label>
-                <form action={updateStock} className={styles.stockForm}>
-                  <input type="hidden" name="id" value={v.id} />
-                  <input 
-                    name="stock" 
-                    type="number" 
-                    defaultValue={v.stock} 
-                    className={styles.stockInput}
-                  />
-                  <button className="btn btn-outline">Update</button>
-                </form>
-              </div>
-            </div>
+              <p className="text-muted-foreground text-sm">
+                {v.description || "Tidak ada deskripsi"}
+              </p>
+            </CardBody>
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

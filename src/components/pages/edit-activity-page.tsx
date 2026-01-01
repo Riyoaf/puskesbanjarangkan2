@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import { useActivityById } from "@/hooks/use-activity";
+import { useActivityById } from "@/hooks/use-activities";
 import { TActivity } from "@/schema/activity-schema";
 
 import ButtonBack from "../atoms/button-back";
