@@ -1,42 +1,60 @@
-import { createClient } from '@/utils/supabase/server'
-import Link from 'next/link'
-import { cancelSchedule } from './actions'
-import styles from './page.module.css'
-import CancelButton from './CancelButton'
+import Link from "next/link";
 
-import { 
-  PlusIcon, 
-  CalendarIcon, 
-  ClockIcon, 
-  MapPinIcon, 
-  HashtagIcon 
-} from '@heroicons/react/24/outline'
+import { formatDate } from "@/lib/utils";
+import { createClient } from "@/utils/supabase/server";
+import {
+  CalendarIcon,
+  ClockIcon,
+  HashtagIcon,
+  MapPinIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
+
+import { cancelSchedule } from "./actions";
+import CancelButton from "./CancelButton";
+import styles from "./page.module.css";
 
 export default async function SchedulePage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data: allRegistrations } = await supabase
-    .from('registrations')
-    .select(`
+    .from("registrations")
+    .select(
+      `
       *,
       vaccines (name)
-    `)
-    .eq('user_id', user?.id)
-    .order('scheduled_date', { ascending: true })
+    `
+    )
+    .eq("user_id", user?.id)
+    .order("scheduled_date", { ascending: true });
 
-  const upcoming = allRegistrations?.filter(r => ['pending', 'approved'].includes(r.status)) || []
-  const history = allRegistrations?.filter(r => ['completed', 'cancelled', 'rejected'].includes(r.status)) || []
+  const upcoming =
+    allRegistrations?.filter((r) =>
+      ["pending", "approved"].includes(r.status)
+    ) || [];
+  const history =
+    allRegistrations?.filter((r) =>
+      ["completed", "cancelled", "rejected"].includes(r.status)
+    ) || [];
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Jadwal Vaksinasi Saya</h1>
-          <p className={styles.subtitle}>Kelola dan pantau jadwal vaksinasi anda</p>
+          <p className={styles.subtitle}>
+            Kelola dan pantau jadwal vaksinasi anda
+          </p>
         </div>
         <Link href="/vaccination" className={styles.btnNew}>
-          <PlusIcon className="w-5 h-5" style={{ width: 20, height: 20, marginRight: 8 }} /> Daftar Baru
+          <PlusIcon
+            className="w-5 h-5"
+            style={{ width: 20, height: 20, marginRight: 8 }}
+          />{" "}
+          Daftar Baru
         </Link>
       </div>
 
@@ -54,11 +72,13 @@ export default async function SchedulePage() {
                   <div className={styles.vaccineInfo}>
                     <h3 className={styles.vaccineName}>{reg.vaccines?.name}</h3>
                     <span className={`${styles.badge} ${styles[reg.status]}`}>
-                      {reg.status === 'pending' ? 'Menunggu' : 'Terjadwal'}
+                      {reg.status === "pending" ? "Menunggu" : "Terjadwal"}
                     </span>
                   </div>
                   <div className={styles.queueBox}>
-                    <span className={styles.queueNumber}># {reg.queue_number || 'A-???'}</span>
+                    <span className={styles.queueNumber}>
+                      # {reg.queue_number || "A-???"}
+                    </span>
                     <span className={styles.queueLabel}>Antrian</span>
                   </div>
                 </div>
@@ -67,40 +87,53 @@ export default async function SchedulePage() {
                   <div className={styles.infoGrid}>
                     <div className={styles.infoItem}>
                       <span className={styles.icon}>
-                        <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                        <CalendarIcon
+                          className="w-5 h-5"
+                          style={{ width: 20, height: 20 }}
+                        />
                       </span>
                       <div>
                         <p className={styles.infoLabel}>Tanggal</p>
                         <p className={styles.infoValue}>
-                          {reg.scheduled_date 
-                            ? new Date(reg.scheduled_date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-                            : 'Menunggu Jadwal'}
+                          {reg.scheduled_date
+                            ? formatDate(reg.scheduled_date)
+                            : "Menunggu Jadwal"}
                         </p>
                       </div>
                     </div>
                     <div className={styles.infoItem}>
                       <span className={styles.icon}>
-                        <ClockIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                        <ClockIcon
+                          className="w-5 h-5"
+                          style={{ width: 20, height: 20 }}
+                        />
                       </span>
                       <div>
                         <p className={styles.infoLabel}>Waktu</p>
-                        <p className={styles.infoValue}>{reg.vaccination_time || '00.00 WITA'}</p>
+                        <p className={styles.infoValue}>
+                          {reg.vaccination_time || "00.00 WITA"}
+                        </p>
                       </div>
                     </div>
                     <div className={styles.infoItemFull}>
                       <span className={styles.icon}>
-                        <MapPinIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+                        <MapPinIcon
+                          className="w-5 h-5"
+                          style={{ width: 20, height: 20 }}
+                        />
                       </span>
                       <div>
                         <p className={styles.infoLabel}>Lokasi</p>
-                        <p className={styles.infoValue}>Puskesmas Banjarangkan II</p>
+                        <p className={styles.infoValue}>
+                          Puskesmas Banjarangkan II
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className={styles.cardFooter}>
-                  {(reg.status === 'pending' || reg.status === 'approved') && (
+                  {(reg.status === "pending" || reg.status === "approved") && (
                     <CancelButton id={reg.id} />
                   )}
                 </div>
@@ -116,38 +149,59 @@ export default async function SchedulePage() {
         {/* History Section */}
         <div className={styles.historySection}>
           <h2 className={styles.sectionTitle}>Riwayat Jadwal</h2>
-          <p className={styles.sectionSubtitle}>Jadwal yang telah selesai atau dibatalkan</p>
+          <p className={styles.sectionSubtitle}>
+            Jadwal yang telah selesai atau dibatalkan
+          </p>
 
           <div className={styles.historyList}>
             {history.length > 0 ? (
               history.map((reg) => (
                 <div key={reg.id} className={styles.historyCard}>
                   <div className={styles.historyHeader}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <h3 className={styles.historyVaccineName}>{reg.vaccines?.name}</h3>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
+                      }}>
+                      <h3 className={styles.historyVaccineName}>
+                        {reg.vaccines?.name}
+                      </h3>
                       <span className={`${styles.badge} ${styles[reg.status]}`}>
-                        {reg.status === 'completed' ? 'Selesai' : 
-                         reg.status === 'cancelled' ? 'Dibatalkan' : 'Ditolak'}
+                        {reg.status === "completed"
+                          ? "Selesai"
+                          : reg.status === "cancelled"
+                          ? "Dibatalkan"
+                          : "Ditolak"}
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className={styles.historyBody}>
                     <div className={styles.historyItem}>
-                      <CalendarIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
+                      <CalendarIcon
+                        className="w-4 h-4"
+                        style={{ width: 16, height: 16 }}
+                      />
                       <span>
-                        {reg.scheduled_date 
-                          ? new Date(reg.scheduled_date).toLocaleDateString('id-ID')
-                          : '-'}
+                        {reg.scheduled_date
+                          ? formatDate(reg.scheduled_date)
+                          : "-"}
                       </span>
                     </div>
                     <div className={styles.historyItem}>
-                      <ClockIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
-                      <span>{reg.vaccination_time || '00.00 WITA'}</span>
+                      <ClockIcon
+                        className="w-4 h-4"
+                        style={{ width: 16, height: 16 }}
+                      />
+                      <span>{reg.vaccination_time || "00.00 WITA"}</span>
                     </div>
                     <div className={styles.historyItem}>
-                      <HashtagIcon className="w-4 h-4" style={{ width: 16, height: 16 }} />
-                      <span>{reg.queue_number || '-'}</span>
+                      <HashtagIcon
+                        className="w-4 h-4"
+                        style={{ width: 16, height: 16 }}
+                      />
+                      <span>{reg.queue_number || "-"}</span>
                     </div>
                   </div>
                 </div>
@@ -159,5 +213,5 @@ export default async function SchedulePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

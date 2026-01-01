@@ -1,84 +1,57 @@
-import { createClient } from '@/utils/supabase/server'
-import { addActivity, deleteActivity } from './actions'
-import styles from './page.module.css'
-import { 
-  PencilSquareIcon, 
-  TrashIcon, 
-  CalendarIcon, 
-  MapPinIcon 
-} from '@heroicons/react/24/outline'
+"use client";
 
-export default async function ActivitiesPage() {
-  const supabase = await createClient()
-  
-  const { data: activities } = await supabase
-    .from('activities')
-    .select('*')
-    .order('date', { ascending: true })
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { useMemo } from "react";
+
+import { Description, Heading1 } from "@/components/atoms/typography";
+import CardBody from "@/components/molecules/card-body";
+import ActivityCard from "@/components/organisms/activity-card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useActivities } from "@/hooks/use-activity";
+import { usePathSegments } from "@/hooks/use-path-segment";
+import { TActivity } from "@/schema/activity-schema";
+
+export default function ActivitiesPage() {
+  const { data, isLoading } = useActivities();
+  const activities: TActivity[] | null | undefined = useMemo(
+    () => data?.data,
+    [data]
+  );
+  const pathSegments = usePathSegments();
 
   return (
     <div>
-      <h1 className={styles.title}>Kelola Kegiatan Puskesmas</h1>
-      
-      <div className={styles.grid}>
-        <div className={`card ${styles.addCard}`}>
-          <h3>Tambah Kegiatan</h3>
-          <form action={addActivity} className={styles.form}>
-            <div className={styles.field}>
-              <label>Judul Kegiatan</label>
-              <input name="title" required placeholder="Contoh: Posyandu Lansia" />
-            </div>
-            <div className={styles.field}>
-              <label>Tanggal</label>
-              <input name="date" type="date" required />
-            </div>
-            <div className={styles.field}>
-              <label>Lokasi</label>
-              <input name="location" required placeholder="Contoh: Balai Banjar X" />
-            </div>
-            <div className={styles.field}>
-              <label>Deskripsi</label>
-              <textarea name="description" rows={3} />
-            </div>
-            <div className={styles.field}>
-              <label>Gambar (Opsional)</label>
-              <input type="file" name="image" accept="image/*" />
-            </div>
-            <button type="submit" className="btn btn-primary">Simpan</button>
-          </form>
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+        <div>
+          <Heading1 text="Kelola Kegiatan Puskesmas" />
+          <Description text="Kelola kegiatan yang akan dilaksanakan oleh Puskesmas" />
         </div>
+        <Link href={pathSegments.fullPath + "/add"}>
+          <Button>
+            <Plus />
+            Tambah Kegiatan
+          </Button>
+        </Link>
+      </div>
 
-        <div className={styles.list}>
-          {activities?.map((activity) => (
-            <div key={activity.id} className={`card ${styles.activityCard}`}>
-              <div className={styles.header}>
-                <h3>{activity.title}</h3>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <a href={`/dashboard/activities/${activity.id}/edit`} className={styles.editBtn} style={{ textDecoration: 'none', fontSize: '1.2rem' }} title="Edit">
-                    <PencilSquareIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
-                  </a>
-                  <form action={deleteActivity}>
-                    <input type="hidden" name="id" value={activity.id} />
-                    <button className={styles.deleteBtn} title="Hapus">
-                      <TrashIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
-                    </button>
-                  </form>
+      <div className="gap-4 space-y-4 grid grid-cols-1 md:grid-cols-2">
+        {isLoading &&
+          Array(3)
+            .fill(0)
+            .map((_, i) => (
+              <CardBody key={i}>
+                <div className="space-y-4">
+                  <Skeleton className="w-1/2 h-6" />
+                  <Skeleton className="w-full h-64" />
                 </div>
-              </div>
-              {activity.image_url && (
-                <img src={activity.image_url} alt={activity.title} className={styles.activityImage} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
-              )}
-              <p className={styles.date} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {new Date(activity.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-              <p className={styles.location} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <MapPinIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {activity.location}
-              </p>
-              <p className={styles.desc}>{activity.description}</p>
-            </div>
-          ))}
-        </div>
+              </CardBody>
+            ))}
+        {activities?.map((activity) => (
+          <ActivityCard key={activity.id} activity={activity} />
+        ))}
       </div>
     </div>
-  )
+  );
 }

@@ -1,72 +1,57 @@
-import { createClient } from '@/utils/supabase/server'
-import { addNews, deleteNews } from './actions'
-import styles from '../activities/page.module.css' // Reusing styles from activities
-import { 
-  PencilSquareIcon, 
-  TrashIcon, 
-  CalendarIcon 
-} from '@heroicons/react/24/outline'
+"use client";
 
-export default async function NewsPage() {
-  const supabase = await createClient()
-  
-  const { data: newsList } = await supabase
-    .from('news')
-    .select('*')
-    .order('created_at', { ascending: false })
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { useMemo } from "react";
+
+import { Description, Heading1 } from "@/components/atoms/typography";
+import CardBody from "@/components/molecules/card-body";
+import NewsCard from "@/components/organisms/news-card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useNews } from "@/hooks/use-news";
+import { usePathSegments } from "@/hooks/use-path-segment";
+import { TNews } from "@/schema/news-schema";
+
+export default function Page() {
+  const { data, isLoading } = useNews();
+  const pathSegments = usePathSegments();
+  const newsData: TNews[] | null | undefined = useMemo(
+    () => data?.data,
+    [data]
+  );
 
   return (
     <div>
-      <h1 className={styles.title}>Kelola Berita Puskesmas</h1>
-      
-      <div className={styles.grid}>
-        <div className={`card ${styles.addCard}`}>
-          <h3>Tambah Berita</h3>
-          <form action={addNews} className={styles.form}>
-            <div className={styles.field}>
-              <label>Judul Berita</label>
-              <input name="title" required placeholder="Contoh: Vaksinasi Massal..." />
-            </div>
-            <div className={styles.field}>
-              <label>Konten Berita</label>
-              <textarea name="content" rows={5} required placeholder="Isi berita..." />
-            </div>
-            <div className={styles.field}>
-              <label>Gambar (Opsional)</label>
-              <input type="file" name="image" accept="image/*" />
-            </div>
-            <button type="submit" className="btn btn-primary">Simpan</button>
-          </form>
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+        <div>
+          <Heading1 text="Kelola Berita Puskesmas" />
+          <Description text="Kelola berita yang akan dilaksanakan oleh Puskesmas" />
         </div>
+        <Link href={pathSegments.fullPath + "/add"}>
+          <Button>
+            <Plus />
+            Tambah Berita
+          </Button>
+        </Link>
+      </div>
 
-        <div className={styles.list}>
-          {newsList?.map((news) => (
-            <div key={news.id} className={`card ${styles.activityCard}`}>
-              <div className={styles.header}>
-                <h3>{news.title}</h3>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <a href={`/dashboard/news/${news.id}/edit`} className={styles.editBtn} style={{ textDecoration: 'none', fontSize: '1.2rem' }} title="Edit">
-                    <PencilSquareIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
-                  </a>
-                  <form action={deleteNews}>
-                    <input type="hidden" name="id" value={news.id} />
-                    <button className={styles.deleteBtn} title="Hapus">
-                      <TrashIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
-                    </button>
-                  </form>
+      <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
+        {isLoading &&
+          Array(3)
+            .fill(0)
+            .map((_, i) => (
+              <CardBody key={i}>
+                <div className="space-y-4">
+                  <Skeleton className="w-1/2 h-6" />
+                  <Skeleton className="w-full h-64" />
                 </div>
-              </div>
-              {news.image_url && (
-                <img src={news.image_url} alt={news.title} className={styles.activityImage} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
-              )}
-              <p className={styles.date} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <CalendarIcon className="w-5 h-5" style={{ width: 20, height: 20 }} /> {new Date(news.created_at).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-              <p className={styles.desc}>{news.content}</p>
-            </div>
-          ))}
-        </div>
+              </CardBody>
+            ))}
+        {newsData?.map((news) => (
+          <NewsCard key={news.id} news={news} />
+        ))}
       </div>
     </div>
-  )
+  );
 }

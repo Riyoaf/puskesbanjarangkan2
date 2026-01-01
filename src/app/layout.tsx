@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import { createClient } from "@/utils/supabase/server";
+
+import { Inter } from "next/font/google";
+
+import { Toaster } from "@/components/ui/sonner";
+import VisitTracker from "@/components/VisitTracker";
+import QueryProvider from "@/providers/query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,21 +14,20 @@ export const metadata: Metadata = {
   description: "Sistem Informasi Vaksinasi Puskesmas Banjarangkan",
 };
 
-import VisitTracker from '@/components/VisitTracker'
-import { Toaster } from 'react-hot-toast'
-
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <VisitTracker />
-        <Toaster position="top-center" />
-        {children}
+        <QueryProvider>
+          <VisitTracker />
+          <Toaster position="top-center" />
+          {children}
+        </QueryProvider>
       </body>
     </html>
-  )
+  );
 }

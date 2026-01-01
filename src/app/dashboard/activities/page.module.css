@@ -64,7 +64,8 @@
   opacity: 1;
 }
 
-.date, .location {
+.date,
+.location {
   font-size: 0.9rem;
   color: var(--secondary);
 }
